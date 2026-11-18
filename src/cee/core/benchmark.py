@@ -85,7 +85,9 @@ class _Observation:
 
 def exact_match_scorer(output: str, expected: str) -> float:
     """Simple deterministic baseline scorer; domains should supply better rubrics."""
-    normalize = lambda value: " ".join(re.sub(r"\\s+", " ", value).casefold().split())
+    def normalize(value: str) -> str:
+        return " ".join(re.sub(r"\\s+", " ", value).casefold().split())
+
     return float(normalize(output) == normalize(expected))
 
 
