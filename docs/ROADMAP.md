@@ -26,11 +26,11 @@
 - [x] Structured reasoning traces and claim schema.
 - [x] Disagreement and contradictory-claim syndrome detection.
 - [x] Evidence-aware baseline decoder with abstention.
-- [x] Unit tests and research protocol documentation.
-- [ ] Provider-backed multi-trace generation.
+- [x] Provider-backed multi-trace generation with Gemini-compatible provider protocol.
+- [x] Bounded targeted repair pass and immutable original trace preservation.
+- [x] Parser and workflow unit tests.
 - [ ] Semantic validators and citation/tool verification.
-- [ ] Targeted repair loop with immutable provenance.
-- [ ] Fault-injection benchmark and statistical report.
+- [ ] Controlled fault-injection benchmark and statistical report.
 - [ ] Evolve correction policy under held-out evaluation.
 
 ## Phase 4 — Model internals
