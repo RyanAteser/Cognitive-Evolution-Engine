@@ -128,8 +128,7 @@ class CognitiveCorrectionWorkflow:
                     "Return only a JSON object with keys: answer (string), claims "
                     "([{key,value,evidence_ids}]), evidence_ids (list), confidence (0..1), "
                     "declared_errors (list). Cite only evidence identifiers provided in "
-                    "the task. Never invent identifiers.
-Strategy: " + instruction
+                    "the task. Never invent identifiers.\nStrategy: " + instruction
                 ),
                 reasoning_strategy=agent_id,
                 temperature=0.15 if agent_id == "evidence-auditor" else 0.35,
@@ -155,10 +154,7 @@ Strategy: " + instruction
                 "Re-evaluate only the disputed claims, check the original task and allowed "
                 "evidence, and do not force consensus. If evidence is insufficient, say so. "
                 "Return the same strict JSON schema: answer, claims, evidence_ids, "
-                "confidence, declared_errors.
-
-TASK:
-" + task.prompt +
+                "confidence, declared_errors.\n\nTASK:\n" + task.prompt +
                 "\n\nATTEMPTS:\n" +
                 json.dumps([{
                     "agent_id": t.agent_id,
