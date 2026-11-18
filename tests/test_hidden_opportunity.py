@@ -10,12 +10,14 @@ def test_load_cases_keeps_split_and_never_requires_answer_key(tmp_path):
     rows = [
         {"case_id": "s1", "domain": "shopify", "split": "validation",
          "task": "find an opportunity", "packet": [{"id": "x", "text": "fact"}]},
+        {"case_id": "s2", "domain": "shopify", "split": "validation",
+         "task": "find another opportunity", "packet": [{"id": "z", "text": "another fact"}]},
         {"case_id": "q1", "domain": "quant", "split": "test",
          "task": "find a hypothesis", "packet": [{"id": "y", "text": "fact"}]},
     ]
     dataset.write_text("\n".join(json.dumps(x) for x in rows), encoding="utf-8")
     selected = load_cases(dataset, "validation")
-    assert [x["case_id"] for x in selected] == ["s1"]
+    assert [x["case_id"] for x in selected] == ["s1", "s2"]
 
 
 def test_load_cases_rejects_duplicate_ids(tmp_path):
