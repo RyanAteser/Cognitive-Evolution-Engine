@@ -56,20 +56,12 @@ def load_cases(path: Path, split: str) -> list[dict[str, Any]]:
 def build_task(case: dict[str, Any]) -> Task:
     packet = json.dumps(case["packet"], ensure_ascii=False, indent=2)
     prompt = (
-        "RESEARCH TASK
-"
-        f"Domain: {case['domain']}
-"
-        f"{case['task']}
-
-"
-        "EVIDENCE PACKET (the IDs below are the only permitted citations):
-"
-        f"{packet}
-
-"
-        "OUTPUT REQUIREMENTS
-"
+        "RESEARCH TASK\n"
+        f"Domain: {case['domain']}\n"
+        f"{case['task']}\n\n"
+        "EVIDENCE PACKET (the IDs below are the only permitted citations):\n"
+        f"{packet}\n\n"
+        "OUTPUT REQUIREMENTS\n"
         "Return a structured report with: (1) up to two candidate opportunities; "
         "(2) target customer or market condition; (3) evidence IDs and explicit "
         "inference chain; (4) counter-evidence and alternative explanations; "
