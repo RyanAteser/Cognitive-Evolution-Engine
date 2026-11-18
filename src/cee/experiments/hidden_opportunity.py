@@ -156,11 +156,8 @@ def run_arm(arm: str, provider: GeminiProvider, task: Task,
         if final_output is None:
             final_output = (
                 "ABSTAIN: " + correction.report.rationale +
-                "
-Initial traces:
-" +
-                "
-".join(t.answer for t in correction.initial_traces)
+                "\nInitial traces:\n" +
+                "\n".join(t.answer for t in correction.initial_traces)
             )
         return {
             "final_output": final_output,
