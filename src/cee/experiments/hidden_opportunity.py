@@ -10,6 +10,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import random
 import time
 from datetime import datetime, timezone
@@ -102,6 +103,7 @@ def _call(provider: GeminiProvider, task: Task, role: str, instruction: str,
         "input_tokens": response.input_tokens,
         "output_tokens": response.output_tokens,
         "estimated_cost": response.estimated_cost,
+        "cost_instrumented": False,
         "latency_seconds": time.perf_counter() - started,
     }
 
@@ -224,6 +226,7 @@ def run_experiment(dataset: Path, output: Path, split: str,
         "arms": list(selected_arms),
         "blind_labels": blind_labels,
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "code_commit": os.getenv("GITHUB_SHA", "not-recorded"),
         "seed": seed,
         "answer_key_loaded": False,
         "scoring": "human_blind_review_required",
