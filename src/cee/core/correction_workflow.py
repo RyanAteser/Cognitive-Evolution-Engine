@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -33,6 +34,8 @@ class CorrectionRun:
     repair_trace: ReasoningTrace | None
     report: CorrectionReport
     generation_calls: int
+    provider_usage: tuple[dict, ...]
+    latency_seconds: float
 
 
 _STRATEGIES = (
@@ -115,7 +118,9 @@ class CognitiveCorrectionWorkflow:
         available_evidence_ids: set[str] | None = None,
         repair: bool = True,
     ) -> CorrectionRun:
+        started = time.perf_counter()
         traces = []
+        provider_usage = []
         for agent_id, instruction in _STRATEGIES[:self.max_agents]:
             candidate = Candidate(
                 system_prompt=(
@@ -123,13 +128,21 @@ class CognitiveCorrectionWorkflow:
                     "Return only a JSON object with keys: answer (string), claims "
                     "([{key,value,evidence_ids}]), evidence_ids (list), confidence (0..1), "
                     "declared_errors (list). Cite only evidence identifiers provided in "
-                    "the task. Never invent identifiers.\nStrategy: " + instruction
+                    "the task. Never invent identifiers.
+Strategy: " + instruction
                 ),
                 reasoning_strategy=agent_id,
                 temperature=0.15 if agent_id == "evidence-auditor" else 0.35,
                 max_output_tokens=1400,
             )
             response = self.provider.generate(candidate, task)
+            provider_usage.append({
+                "model": response.model,
+                "input_tokens": response.input_tokens,
+                "output_tokens": response.output_tokens,
+                "estimated_cost": response.estimated_cost,
+                "cost_instrumented": False,
+            })
             traces.append(parse_reasoning_trace(agent_id, response.text))
 
         initial = tuple(traces)
@@ -142,8 +155,14 @@ class CognitiveCorrectionWorkflow:
                 "Re-evaluate only the disputed claims, check the original task and allowed "
                 "evidence, and do not force consensus. If evidence is insufficient, say so. "
                 "Return the same strict JSON schema: answer, claims, evidence_ids, "
-                "confidence, declared_errors.\n\nTASK:\n" + task.prompt +
-                "\n\nATTEMPTS:\n" +
+                "confidence, declared_errors.
+
+TASK:
+" + task.prompt +
+                "
+
+ATTEMPTS:
+" +
                 json.dumps([{
                     "agent_id": t.agent_id,
                     "answer": t.answer,
@@ -151,7 +170,10 @@ class CognitiveCorrectionWorkflow:
                                 "evidence_ids": list(c.evidence_ids)} for c in t.claims],
                     "evidence_ids": list(t.evidence_ids),
                 } for t in initial], ensure_ascii=False) +
-                "\n\nDETECTED SYNDROMES:\n" +
+                "
+
+DETECTED SYNDROMES:
+" +
                 json.dumps([s.__dict__ for s in report.syndromes], ensure_ascii=False)
             )
             response = self.provider.generate(
@@ -166,9 +188,19 @@ class CognitiveCorrectionWorkflow:
                 ),
                 Task(task.task_id + "-repair", task.domain, repair_prompt, task.metadata),
             )
+            provider_usage.append({
+                "model": response.model,
+                "input_tokens": response.input_tokens,
+                "output_tokens": response.output_tokens,
+                "estimated_cost": response.estimated_cost,
+                "cost_instrumented": False,
+            })
             repair_trace = parse_reasoning_trace("targeted-repair", response.text)
             calls += 1
             report = self.corrector.decode(
                 initial + (repair_trace,), available_evidence_ids
             )
-        return CorrectionRun(initial, repair_trace, report, calls)
+        return CorrectionRun(
+            initial, repair_trace, report, calls, tuple(provider_usage),
+            time.perf_counter() - started,
+        )
