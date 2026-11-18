@@ -1,0 +1,147 @@
+{
+  "dataset_version": "hidden_opportunity_v1",
+  "evaluator_only": true,
+  "cases": {
+    "shopify_001": {
+      "defensible_opportunities": [
+        "Test an accessory/bundle or add-on of compatible sealed sauce cups; repeated review/support pain + feasible supplier source, but MOQ/lead-time and leakproof claim risk need validation.",
+        "Potential content/FAQ or compatibility guide around sauce separation, but only if validated by customer interviews/search landing test."
+      ],
+      "key_contradictions": [
+        "S1 says leak-resistant, not leakproof; reviews include sideways leakage.",
+        "S6 search volume does not establish purchase intent."
+      ],
+      "must_not_claim": [
+        "That current container is leakproof.",
+        "That search volume guarantees demand."
+      ],
+      "abstention": "Do not recommend a large purchase before testing demand and confirming compatibility."
+    },
+    "shopify_002": {
+      "defensible_opportunities": [
+        "Test a monitor-adjacent mounting accessory or positioning solution as a low-cost prototype, based on glare and mounting questions; validate ergonomics and stability.",
+        "Investigate glare-specific content/positioning, but do not claim eye-health benefits or unverified optical performance."
+      ],
+      "key_contradictions": [
+        "Review complaints about glare do not prove a monitor light bar solves it.",
+        "Clamp instability and preliminary redesign cost complicate product change."
+      ],
+      "must_not_claim": [
+        "Flicker-free, eye-safe, or high-CRI performance."
+      ],
+      "abstention": "Do not claim a redesign will improve conversion or reduce returns without testing."
+    },
+    "shopify_003": {
+      "defensible_opportunities": [
+        "Prototype a low-cost visibility/labeling insert to address difficulty identifying contents; test against current organizer before committing to MOQ.",
+        "Test a dimension/fit guide using common carry-on measurements; repeated sizing questions suggest uncertainty, but fit claims need measured validation."
+      ],
+      "key_contradictions": [
+        "Conversion-rate comparison confounded by traffic-source mix change.",
+        "Competitor quality and sales are unknown."
+      ],
+      "must_not_claim": [
+        "That clear-front design increases sales."
+      ],
+      "abstention": "Do not prioritize personalization without weighing manual fulfillment cost."
+    },
+    "shopify_004": {
+      "defensible_opportunities": [
+        "Test replacement seal kit availability as an accessory/retention offer; demand signal from 27 support tickets and competitor precedent, subject to MOQ and margin.",
+        "Create a cleaning/dishwasher compatibility guide only after verifying component-level manufacturer instructions."
+      ],
+      "key_contradictions": [
+        "Cleaning difficulty is suspected, not verified as cause of returns.",
+        "BPA-free supplier declaration is not independent safety certification."
+      ],
+      "must_not_claim": [
+        "Dishwasher safe, independently certified, or that cleaning explains the 11% return rate."
+      ],
+      "abstention": "Do not infer return reduction from support volume."
+    },
+    "quant_001": {
+      "defensible_opportunities": [
+        "Investigate whether late-entry concentration reflects a repeatable execution or information-timing pattern, using winners and losers, normalized timestamps, and full order-book/fill data.",
+        "Test whether widened expiry spreads erase apparent edge after realistic execution costs."
+      ],
+      "key_contradictions": [
+        "Timing summary includes winners only, creating severe selection bias.",
+        "Missing intervals, local timestamps, and one-venue coverage undermine inference."
+      ],
+      "must_not_claim": [
+        "That late-entry sniping is profitable or that the wallet has an edge."
+      ],
+      "abstention": "No strategy claim; require complete trades, costs, losers, and out-of-sample validation."
+    },
+    "quant_002": {
+      "defensible_opportunities": [
+        "Test whether position sizing increases after losses (martingale-like behavior) using complete event-level positions and cash-flow-adjusted equity; current 8/10 pattern is exploratory only.",
+        "Investigate deposits as a confounder in apparent performance and sizing progression."
+      ],
+      "key_contradictions": [
+        "Daily balances plus deposits cannot establish realized P&L or intraday sizing.",
+        "Strong BTC trend and no matched controls confound positive month."
+      ],
+      "must_not_claim": [
+        "That wallet uses martingale or is profitable based on +4.2% marked-to-market."
+      ],
+      "abstention": "Do not infer risk of ruin without leverage, margin, and full exposure data."
+    },
+    "quant_003": {
+      "defensible_opportunities": [
+        "Run a matched, stratified test of mid-probability trades controlling for contract type, time, spread, fees, and selection; the observed 57% vs 49% is confounded.",
+        "Investigate whether wider spreads make the apparent win-rate lift economically negative."
+      ],
+      "key_contradictions": [
+        "Different contract/time distributions; wallet selected from profitable leaderboard; no independent period.",
+        "Win rate is not expected value or net profitability."
+      ],
+      "must_not_claim": [
+        "That 0.42-0.58 entries are an edge."
+      ],
+      "abstention": "Treat as hypothesis only; require unbiased cohort and fee-adjusted out-of-sample test."
+    },
+    "quant_004": {
+      "defensible_opportunities": [
+        "Test whether sizing escalation follows losses using complete order-level chronology, cash flows, and linked-wallet/hedge coverage; current 4/6 sequence signal is weak.",
+        "Investigate external transfers as a possible explanation for rising balance and changing size."
+      ],
+      "key_contradictions": [
+        "Balance increase is not cash-flow-adjusted return.",
+        "One venue, minute-rounded timestamps, and no order book obscure execution."
+      ],
+      "must_not_claim": [
+        "That the wallet is martingaling, profitable, or has a repeatable strategy."
+      ],
+      "abstention": "No trading recommendation; require complete equity curve, fills, fees, and risk data."
+    },
+    "shopify_005": {
+      "defensible_opportunities": [
+        "Test a replacement gasket kit plus illustrated cleaning instructions; recurring gasket tickets and cleaning complaints support a low-cost customer-support/retention hypothesis.",
+        "Create an evidence-checked cleaning guide and measure support-contact reduction before claiming odor prevention."
+      ],
+      "key_contradictions": [
+        "Odor cause is unverified; reviews don't establish a hygiene or health issue.",
+        "Competitor guide presence does not establish effectiveness."
+      ],
+      "must_not_claim": [
+        "Antimicrobial properties or that the kit prevents odor."
+      ],
+      "abstention": "Do not claim health/safety outcomes or assume all odor reports share one cause."
+    },
+    "shopify_006": {
+      "defensible_opportunities": [
+        "Test an opt-in filter reminder and simple model-specific replacement-filter finder; repeated compatibility/timing questions plus low implementation cost make a low-risk experiment.",
+        "Build a measured room-size suitability explainer only after obtaining verified performance data."
+      ],
+      "key_contradictions": [
+        "Repeat-purchase rate is unreliable due to incomplete identity matching and short window.",
+        "Manufacturer recommendation is usage-dependent; no independent room-size testing."
+      ],
+      "must_not_claim": [
+        "Purifier is suitable for rooms above 150 sq ft or that reminders will raise retention."
+      ],
+      "abstention": "Do not make room-size or health-effect claims without validated performance data."
+    }
+  }
+}
