@@ -127,10 +127,7 @@ def run_arm(arm: str, provider: GeminiProvider, task: Task,
             )
         synthesis_task = Task(
             task.task_id + "-synthesis", task.domain,
-            task.prompt + "
-
-INDEPENDENT ANALYSES:
-" +
+            task.prompt + "\n\nINDEPENDENT ANALYSES:\n" +
             json.dumps([{"role": x["role"], "text": x["text"]} for x in independent],
                        ensure_ascii=False),
             task.metadata,
