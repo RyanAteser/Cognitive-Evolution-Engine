@@ -139,6 +139,9 @@ The command creates three artifacts:
 - `*_blind_review.csv`: final outputs with randomized labels and blank scoring fields; give reviewers this file only;
 - `*_unblind_key.json`: label-to-arm mapping; keep it separate until scoring is frozen.
 
+
+For repeatability, pass `--repeats N` to execute each selected arm multiple times per case. Keep repeats identical across arms and record the value in the run manifest. Repeated model calls increase token usage; begin with one repeat.
+
 The command never opens `benchmarks/answer_keys/hidden_opportunity_v1.json`. The blind CSV is a human scoring worksheet, not an automatically scored result. After all reviewers finish, aggregate the seven rubric dimensions, record critical failures and unsupported claims, then use the unblind key to compare arms.
 
 **Telemetry caveat:** Gemini currently exposes token counts but this adapter does not calculate price. Cost is therefore marked uninstrumented/unknown, not zero. The runner records per-call latency and token counts where available. Do not use cost promotion gates until provider pricing is instrumented.
