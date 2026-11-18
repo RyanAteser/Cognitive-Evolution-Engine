@@ -7,7 +7,7 @@ from cee.adapters.general import GeneralResearchAdapter
 from cee.core.evolution import EvolutionEngine
 from cee.core.schemas import Candidate, Evaluation
 from cee.models.gemini import GeminiProvider
-from cee.storage import ExperimentStore
+from cee.storage import ExperimentStore\nfrom cee.experiments.hidden_opportunity import run_experiment
 
 
 def run_demo() -> int:
@@ -71,7 +71,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="cee")
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("demo")
-    subparsers.add_parser("status")
+    subparsers.add_parser("status")\n    experiment_parser = subparsers.add_parser("experiment-001")\n    experiment_parser.add_argument("--split", choices=("train", "validation", "test"), default="validation")\n    experiment_parser.add_argument("--arms", default="A,B,C,D,E")\n    experiment_parser.add_argument("--dataset", default="benchmarks/datasets/hidden_opportunity_v1.jsonl")\n    experiment_parser.add_argument("--output", default="research/experiment_001/validation_run.json")
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument(
         "--domain", default="general", choices=("general", "shopify", "finance")
