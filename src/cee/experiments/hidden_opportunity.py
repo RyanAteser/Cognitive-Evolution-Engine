@@ -209,7 +209,10 @@ Initial traces:
 
 
 def run_experiment(dataset: Path, output: Path, split: str,
-                   selected_arms: tuple[str, ...], seed: int = 20261118) -> Path:
+                   selected_arms: tuple[str, ...], seed: int = 20261118,
+                   repeats: int = 1) -> Path:
+    if repeats < 1:
+        raise ValueError("repeats must be at least one")
     cases = load_cases(dataset, split)
     provider = GeminiProvider()
     dataset_hash = hashlib.sha256(dataset.read_bytes()).hexdigest()
@@ -222,6 +225,7 @@ def run_experiment(dataset: Path, output: Path, split: str,
         "dataset_version": DATASET_VERSION,
         "dataset_sha256": dataset_hash,
         "split": split,
+        "repeats": repeats,
         "model": provider.model,
         "arms": list(selected_arms),
         "blind_labels": blind_labels,
@@ -236,17 +240,27 @@ def run_experiment(dataset: Path, output: Path, split: str,
         task = build_task(case)
         evidence_ids = {item["id"] for item in case["packet"]}
         for arm in selected_arms:
-            result = run_arm(arm, provider, task, evidence_ids)
-            records.append({
-                "case_id": case["case_id"],
-                "domain": case["domain"],
-                "split": split,
-                "blind_label": blind_labels[arm],
-                "raw_arm": arm,
-                "result": result,
-                "dataset_sha256": dataset_hash,
-                "model": provider.model,
-            })
+            for repeat_index in range(repeats):
+                try:
+                    result = run_arm(arm, provider, task, evidence_ids)
+                    failed = False
+                except Exception as exc:
+                    result = {"final_output": "", "error": f"{type(exc).__name__}: {exc}",
+                              "calls": []}
+                    failed = True
+                records.append({
+                    "case_id": case["case_id"],
+                    "domain": case["domain"],
+                    "split": split,
+                    "repeat": repeat_index + 1,
+                    "blind_label": blind_labels[arm],
+                    "raw_arm": arm,
+                    "failed": failed,
+                    "result": result,
+                    "dataset_sha256": dataset_hash,
+                    "prompt_sha256": hashlib.sha256(task.prompt.encode()).hexdigest(),
+                    "model": provider.model,
+                })
     # Freeze all outputs in one JSON document. Keep raw_arm in the sealed
     # research archive; blind review export below excludes it and all model traces.
     archive = {"manifest": {k: v for k, v in manifest.items() if k != "blind_labels"},
@@ -263,7 +277,7 @@ def run_experiment(dataset: Path, output: Path, split: str,
     review_path = output.with_name(output.stem + "_blind_review.csv")
     with review_path.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=[
-            "case_id", "domain", "blind_label", "final_output",
+            "case_id", "domain", "repeat", "blind_label", "final_output", "execution_error",
             "evidence_grounding_0_25", "novelty_0_15", "reasoning_0_15",
             "counter_evidence_0_15", "testability_0_15",
             "calibration_0_10", "constraints_0_5",
@@ -274,8 +288,10 @@ def run_experiment(dataset: Path, output: Path, split: str,
             writer.writerow({
                 "case_id": record["case_id"],
                 "domain": record["domain"],
+                "repeat": record["repeat"],
                 "blind_label": record["blind_label"],
                 "final_output": result_text(record["result"]),
+                "execution_error": record["result"].get("error", ""),
             })
     print(f"Frozen raw run: {output}")
     print(f"Blind scoring sheet: {review_path}")
@@ -298,11 +314,12 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path(
         "research/experiment_001/validation_run.json"))
     parser.add_argument("--seed", type=int, default=20261118)
+    parser.add_argument("--repeats", type=int, default=1)
     args = parser.parse_args()
     arms = tuple(dict.fromkeys(x.strip().upper() for x in args.arms.split(",") if x.strip()))
     if not arms or any(x not in ARMS for x in arms):
         parser.error("--arms must contain one or more of A,B,C,D,E")
-    run_experiment(args.dataset, args.output, args.split, arms, args.seed)
+    run_experiment(args.dataset, args.output, args.split, arms, args.seed, args.repeats)
 
 
 if __name__ == "__main__":
