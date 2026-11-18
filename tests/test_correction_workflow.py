@@ -66,6 +66,8 @@ def test_workflow_generates_independent_paths_and_one_repair():
     assert len(result.initial_traces) == 2
     assert result.repair_trace is not None
     assert result.generation_calls == 3
+    assert len(result.provider_usage) == 3
+    assert result.latency_seconds >= 0
     assert result.report.answer == "The supported answer is 42."
 
 
@@ -76,4 +78,5 @@ def test_workflow_can_disable_repair():
     result = workflow.run(task, {"s1"}, repair=False)
     assert result.repair_trace is None
     assert result.generation_calls == 2
+    assert len(result.provider_usage) == 2
     assert len(provider.calls) == 2

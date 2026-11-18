@@ -2,12 +2,14 @@
 import argparse
 import os
 import time
+from pathlib import Path
 
 from cee.adapters.general import GeneralResearchAdapter
 from cee.core.evolution import EvolutionEngine
 from cee.core.schemas import Candidate, Evaluation
 from cee.models.gemini import GeminiProvider
 from cee.storage import ExperimentStore
+from cee.experiments.hidden_opportunity import run_experiment
 
 
 def run_demo() -> int:
@@ -72,6 +74,12 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("demo")
     subparsers.add_parser("status")
+    experiment_parser = subparsers.add_parser("experiment-001")
+    experiment_parser.add_argument("--split", choices=("train", "validation", "test"), default="validation")
+    experiment_parser.add_argument("--arms", default="A,B,C,D,E")
+    experiment_parser.add_argument("--dataset", default="benchmarks/datasets/hidden_opportunity_v1.jsonl")
+    experiment_parser.add_argument("--output", default="research/experiment_001/validation_run.json")
+    experiment_parser.add_argument("--repeats", type=int, default=1)
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument(
         "--domain", default="general", choices=("general", "shopify", "finance")
@@ -87,6 +95,12 @@ def main() -> None:
         return
     if args.command == "run":
         raise SystemExit(run_task(args.domain, args.task))
+    if args.command == "experiment-001":
+        arms = tuple(dict.fromkeys(x.strip().upper() for x in args.arms.split(",") if x.strip()))
+        if not arms or any(x not in {"A", "B", "C", "D", "E"} for x in arms):
+            raise SystemExit("--arms must contain one or more of A,B,C,D,E")
+        run_experiment(Path(args.dataset), Path(args.output), args.split, arms, repeats=args.repeats)
+        return
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -33,6 +34,8 @@ class CorrectionRun:
     repair_trace: ReasoningTrace | None
     report: CorrectionReport
     generation_calls: int
+    provider_usage: tuple[dict, ...]
+    latency_seconds: float
 
 
 _STRATEGIES = (
@@ -115,7 +118,9 @@ class CognitiveCorrectionWorkflow:
         available_evidence_ids: set[str] | None = None,
         repair: bool = True,
     ) -> CorrectionRun:
+        started = time.perf_counter()
         traces = []
+        provider_usage = []
         for agent_id, instruction in _STRATEGIES[:self.max_agents]:
             candidate = Candidate(
                 system_prompt=(
@@ -130,6 +135,13 @@ class CognitiveCorrectionWorkflow:
                 max_output_tokens=1400,
             )
             response = self.provider.generate(candidate, task)
+            provider_usage.append({
+                "model": response.model,
+                "input_tokens": response.input_tokens,
+                "output_tokens": response.output_tokens,
+                "estimated_cost": response.estimated_cost,
+                "cost_instrumented": False,
+            })
             traces.append(parse_reasoning_trace(agent_id, response.text))
 
         initial = tuple(traces)
@@ -166,9 +178,19 @@ class CognitiveCorrectionWorkflow:
                 ),
                 Task(task.task_id + "-repair", task.domain, repair_prompt, task.metadata),
             )
+            provider_usage.append({
+                "model": response.model,
+                "input_tokens": response.input_tokens,
+                "output_tokens": response.output_tokens,
+                "estimated_cost": response.estimated_cost,
+                "cost_instrumented": False,
+            })
             repair_trace = parse_reasoning_trace("targeted-repair", response.text)
             calls += 1
             report = self.corrector.decode(
                 initial + (repair_trace,), available_evidence_ids
             )
-        return CorrectionRun(initial, repair_trace, report, calls)
+        return CorrectionRun(
+            initial, repair_trace, report, calls, tuple(provider_usage),
+            time.perf_counter() - started,
+        )
