@@ -21,13 +21,13 @@ A majority vote is not an error corrector. A useful decoder needs evidence, task
 
 ## Current implementation
 
-The module in src/cee/core/error_correction.py provides:
+The modules in src/cee/core/error_correction.py and src/cee/core/correction_workflow.py now provide:
 
 - Claim: a normalized proposition (key, value) with evidence identifiers.
 - ReasoningTrace: one agent's answer, claims, evidence references, confidence, and declared errors.
 - Syndrome: a structured warning emitted by the detector.
 - CorrectionReport: selected answer or abstention, per-agent scores, agreement, detected syndromes, and an auditable rationale.
-- CognitiveErrorCorrector: deterministic detection and conservative decoding.
+- CognitiveErrorCorrector: deterministic detection and conservative decoding.\n- CognitiveCorrectionWorkflow: provider-backed diverse trace generation, strict trace parsing, evidence-aware decoding, and one bounded targeted-repair pass. The Gemini adapter can be supplied directly as the provider.
 
 ### Detection signals
 
