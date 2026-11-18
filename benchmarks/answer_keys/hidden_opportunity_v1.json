@@ -142,6 +142,34 @@
         "Purifier is suitable for rooms above 150 sq ft or that reminders will raise retention."
       ],
       "abstention": "Do not make room-size or health-effect claims without validated performance data."
+    },
+    "quant_005": {
+      "defensible_opportunities": [
+        "Investigate whether high win rate masks negative expectancy because average gross loss exceeds average gross win; calculate net expectancy with fees/slippage and include a matched unselected cohort.",
+        "Test whether performance persists outside the single high-volatility week using walk-forward evaluation."
+      ],
+      "key_contradictions": [
+        "63% win rate is from a high-win-rate-selected wallet cohort; severe selection bias.",
+        "Gross average win 1.4 ticks is below average loss 2.1 ticks before costs."
+      ],
+      "must_not_claim": [
+        "That 63% win rate implies positive expectancy or a profitable strategy."
+      ],
+      "abstention": "No edge claim until full net expectancy and out-of-sample performance are known."
+    },
+    "quant_006": {
+      "defensible_opportunities": [
+        "Investigate whether the wallet reacts to public probability moves with measurable execution advantage, using full-resolution order book and fill timestamps.",
+        "Test whether apparent timing association survives unbiased sampling and controls for market volatility and spread."
+      ],
+      "key_contradictions": [
+        "Trades were hand-selected for visually clear behavior, creating selection bias.",
+        "30-second snapshots cannot establish exact causal ordering; fill timestamps and costs are absent."
+      ],
+      "must_not_claim": [
+        "That the wallet front-runs, predicts, or profits from probability moves."
+      ],
+      "abstention": "Treat as an exploratory pattern only; require complete unselected trade population and execution data."
     }
   }
 }
