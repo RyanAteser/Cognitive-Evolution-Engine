@@ -249,12 +249,14 @@ def run_experiment(dataset: Path, output: Path, split: str,
     archive = {"manifest": {k: v for k, v in manifest.items() if k != "blind_labels"},
                "records": records}
     unblind_path = output.with_name(output.stem + "_unblind_key.json")
-    unblind_path.write_text(json.dumps({"blind_labels": blind_labels}, indent=2) + "\
-",
-                            encoding="utf-8")
-    output.write_text(json.dumps(archive, ensure_ascii=False, indent=2) + "
-",
-                      encoding="utf-8")
+    unblind_path.write_text(
+        json.dumps({"blind_labels": blind_labels}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    output.write_text(
+        json.dumps(archive, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     review_path = output.with_name(output.stem + "_blind_review.csv")
     with review_path.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=[
