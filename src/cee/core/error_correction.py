@@ -126,21 +126,23 @@ class CognitiveErrorCorrector:
         for trace in items:
             answer_groups[self._normalize(trace.answer)].append(trace)
             trace_evidence = set(trace.evidence_ids)
+            claim_evidence = {
+                ref for claim in trace.claims for ref in claim.evidence_ids
+            }
+            all_evidence = trace_evidence | claim_evidence
             if available_evidence_ids is not None:
-                trace_evidence.intersection_update(available_evidence_ids)
+                all_evidence.intersection_update(available_evidence_ids)
             supported = 0
             for claim in trace.claims:
                 refs = set(claim.evidence_ids)
                 if available_evidence_ids is not None:
                     refs.intersection_update(available_evidence_ids)
-                elif trace_evidence:
-                    refs.intersection_update(trace_evidence)
                 supported += bool(refs)
             support_ratio = (
                 supported / len(trace.claims) if trace.claims
                 else (1.0 if trace_evidence else 0.0)
             )
-            evidence_count = len(trace_evidence)
+            evidence_count = len(all_evidence)
             error_penalty = min(0.6, 0.25 * len(trace.declared_errors))
             score = 0.55 * support_ratio + 0.25 * min(1.0, evidence_count / 2)
             score += 0.20 * trace.confidence
