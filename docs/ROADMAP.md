@@ -8,12 +8,14 @@
 - [x] Offline demo and unit tests.
 - [ ] Run CI and verify packaging on supported Python versions.
 
-## Phase 1 — Evaluation
-- [ ] Versioned task/dataset registry.
-- [ ] Baseline-versus-candidate runner with fixed budgets.
-- [ ] Human and deterministic rubric evaluators.
-- [ ] Repeated seeds, confidence intervals, and reports.
-- [ ] Cost/token telemetry.
+## Phase 1 — Evaluation and benchmarking
+- [x] Paired baseline-versus-candidate runner with repeated runs.
+- [x] Explicit train/validation/test split enforcement for promotion.
+- [x] Pluggable scorer, paired bootstrap interval, and cost/latency/error guardrails.
+- [ ] Versioned dataset registry and immutable dataset snapshots.
+- [ ] Blinded human/domain rubric evaluators.
+- [ ] p95 latency, token telemetry, and provider cost accounting.
+- [ ] Real general reasoning, Shopify sandbox, and finance walk-forward suites.
 
 ## Phase 2 — Optimization
 - [ ] Prompt mutation/crossover and diversity controls.
@@ -30,7 +32,7 @@
 - [x] Bounded targeted repair pass and immutable original trace preservation.
 - [x] Parser and workflow unit tests.
 - [ ] Semantic validators and citation/tool verification.
-- [ ] Controlled fault-injection benchmark and statistical report.
+- [ ] Controlled fault-injection benchmark and correction-specific metrics.
 - [ ] Evolve correction policy under held-out evaluation.
 
 ## Phase 4 — Model internals

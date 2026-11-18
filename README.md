@@ -61,4 +61,4 @@ Never commit API keys. See .env.example.
 
 Gemini's standard API controls are used as documented. Token-logit, soft-prompt, embedding, and activation interventions require a model/runtime that exposes those capabilities; ordinary prompt changes do not simulate them.
 
-See the experiment protocol and roadmap in docs.
+See the [benchmark protocol](docs/BENCHMARK_PROTOCOL.md) for dataset splits, paired comparisons, statistical checks, ablations, domain suites, and promotion rules.

@@ -1,0 +1,9 @@
+{"task_id":"gen-train-001","domain":"general","split":"train","prompt":"What is 17 + 25? Return only the integer.","expected_output":"42","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-train-002","domain":"general","split":"train","prompt":"A box has 8 red and 5 blue balls. How many balls total? Return only the integer.","expected_output":"13","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-train-003","domain":"general","split":"train","prompt":"What is 9 multiplied by 7? Return only the integer.","expected_output":"63","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-val-001","domain":"general","split":"validation","prompt":"What is 144 divided by 12? Return only the integer.","expected_output":"12","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-val-002","domain":"general","split":"validation","prompt":"A task takes 15 minutes. How many minutes do 4 identical tasks take sequentially? Return only the integer.","expected_output":"60","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-val-003","domain":"general","split":"validation","prompt":"What is 31 minus 18? Return only the integer.","expected_output":"13","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-test-001","domain":"general","split":"test","prompt":"What is 23 + 19? Return only the integer.","expected_output":"42","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-test-002","domain":"general","split":"test","prompt":"A shop has 6 shelves with 4 books each. How many books are there? Return only the integer.","expected_output":"24","task_type":"arithmetic","synthetic":true}
+{"task_id":"gen-test-003","domain":"general","split":"test","prompt":"What is 100 minus 37? Return only the integer.","expected_output":"63","task_type":"arithmetic","synthetic":true}
