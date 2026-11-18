@@ -112,6 +112,46 @@ Check whether the proposal follows from product, review, return, support, or tra
 ### Quant research
 Check whether the hypothesis is distinguishable from noise, selection bias, survivorship bias, look-ahead leakage, fees, spread, slippage, and regime dependence. Require out-of-sample and walk-forward validation. No synthetic result is evidence of a live trading edge.
 
+
+## Running the experiment
+
+Install the project and Gemini extra, then set `GEMINI_API_KEY` in the shell (never commit it):
+
+```powershell
+python -m pip install -e ".[gemini,dev]"
+$env:GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"
+```
+
+Run a low-cost validation pilot first:
+
+```powershell
+cee experiment-001 --split validation --arms A,D,E --output research/experiment_001/validation_A_DE.json
+```
+
+Then run all five arms on validation after checking usage/cost:
+
+```powershell
+cee experiment-001 --split validation --arms A,B,C,D,E --output research/experiment_001/validation_all.json
+```
+
+The command creates three artifacts:
+- `*_run.json`: raw outputs and traces for the research owner;
+- `*_blind_review.csv`: final outputs with randomized labels and blank scoring fields; give reviewers this file only;
+- `*_unblind_key.json`: label-to-arm mapping; keep it separate until scoring is frozen.
+
+The command never opens `benchmarks/answer_keys/hidden_opportunity_v1.json`. The blind CSV is a human scoring worksheet, not an automatically scored result. After all reviewers finish, aggregate the seven rubric dimensions, record critical failures and unsupported claims, then use the unblind key to compare arms.
+
+**Telemetry caveat:** Gemini currently exposes token counts but this adapter does not calculate price. Cost is therefore marked uninstrumented/unknown, not zero. The runner records per-call latency and token counts where available. Do not use cost promotion gates until provider pricing is instrumented.
+
+Run tests before the first provider call:
+
+```powershell
+python -m pytest -q
+ruff check src tests
+```
+
+Do not run the held-out test split until the prompts, scoring guide, and validation decisions are frozen.
+
 ## Primary analysis
 
 For each arm report:
