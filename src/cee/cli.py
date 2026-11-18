@@ -79,6 +79,7 @@ def main() -> None:
     experiment_parser.add_argument("--arms", default="A,B,C,D,E")
     experiment_parser.add_argument("--dataset", default="benchmarks/datasets/hidden_opportunity_v1.jsonl")
     experiment_parser.add_argument("--output", default="research/experiment_001/validation_run.json")
+    experiment_parser.add_argument("--repeats", type=int, default=1)
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument(
         "--domain", default="general", choices=("general", "shopify", "finance")
@@ -98,7 +99,7 @@ def main() -> None:
         arms = tuple(dict.fromkeys(x.strip().upper() for x in args.arms.split(",") if x.strip()))
         if not arms or any(x not in {"A", "B", "C", "D", "E"} for x in arms):
             raise SystemExit("--arms must contain one or more of A,B,C,D,E")
-        run_experiment(Path(args.dataset), Path(args.output), args.split, arms)
+        run_experiment(Path(args.dataset), Path(args.output), args.split, arms, repeats=args.repeats)
         return
 
 
