@@ -22,20 +22,31 @@
 - [ ] Reasoning workflow and tool-policy search.
 - [ ] Ablation and regression benchmarks.
 
-## Phase 3 — Model internals
+## Phase 3 — Cognitive Error Correction
+- [x] Structured reasoning traces and claim schema.
+- [x] Disagreement and contradictory-claim syndrome detection.
+- [x] Evidence-aware baseline decoder with abstention.
+- [x] Unit tests and research protocol documentation.
+- [ ] Provider-backed multi-trace generation.
+- [ ] Semantic validators and citation/tool verification.
+- [ ] Targeted repair loop with immutable provenance.
+- [ ] Fault-injection benchmark and statistical report.
+- [ ] Evolve correction policy under held-out evaluation.
+
+## Phase 4 — Model internals
 - [ ] Open-weight model runtime.
 - [ ] Logit capture/intervention.
 - [ ] Soft-prompt and embedding optimization.
 - [ ] Activation intervention.
 - [ ] Runtime capability matrix.
 
-## Phase 4 — Domain benchmarks
+## Phase 5 — Domain benchmarks
 - [ ] Shopify sandbox and historical task suite.
 - [ ] Read-only Research-Quant integration.
 - [ ] Finance walk-forward harness.
 - [ ] General reasoning benchmark.
 
-## Phase 5 — Safe self-improvement
+## Phase 6 — Safe self-improvement
 - [ ] Isolated optimizer variants and promotion gates.
 - [ ] Rollback and immutable baseline.
 - [ ] Autonomous scheduler with hard budgets and stop controls.
