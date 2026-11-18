@@ -159,10 +159,7 @@ Strategy: " + instruction
 
 TASK:
 " + task.prompt +
-                "
-
-ATTEMPTS:
-" +
+                "\n\nATTEMPTS:\n" +
                 json.dumps([{
                     "agent_id": t.agent_id,
                     "answer": t.answer,
@@ -170,10 +167,7 @@ ATTEMPTS:
                                 "evidence_ids": list(c.evidence_ids)} for c in t.claims],
                     "evidence_ids": list(t.evidence_ids),
                 } for t in initial], ensure_ascii=False) +
-                "
-
-DETECTED SYNDROMES:
-" +
+                "\n\nDETECTED SYNDROMES:\n" +
                 json.dumps([s.__dict__ for s in report.syndromes], ensure_ascii=False)
             )
             response = self.provider.generate(
