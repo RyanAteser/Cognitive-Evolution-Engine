@@ -70,3 +70,14 @@ A candidate is not promoted merely because it has higher average score. The impr
 - Bootstrap intervals are descriptive and depend on representative, independent task sampling; they do not repair dataset leakage or poor labels.
 - Cost is only as accurate as the provider's returned cost field. Gemini provider currently reports token counts but does not calculate price.
 - P95 latency, token totals, semantic citation verification, abstention calibration, and correction-specific metrics are planned extensions.
+
+
+## Included smoke dataset
+
+`benchmarks/datasets/general_smoke_v1.jsonl` is a tiny, versioned fixture with explicit
+train/validation/test assignments. It exists to exercise dataset parsing, split discipline,
+and end-to-end benchmark wiring with deterministic arithmetic examples. It is **synthetic
+infrastructure test data**, not a representative reasoning benchmark and not evidence that
+CEE or any correction strategy is better. Do not use its test split to tune a candidate; once
+used for development, treat it as an exposed smoke test and create a fresh holdout for any
+real promotion claim.
