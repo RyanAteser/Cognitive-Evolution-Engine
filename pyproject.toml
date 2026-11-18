@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cognitive-evolution-engine"
+version = "0.1.0"
+description = "Domain-independent experimental platform for evolving LLM problem-solving workflows."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+gemini = ["google-genai>=1.0.0"]
+optimization = ["optuna>=4.0.0"]
+open-models = ["torch>=2.2.0", "transformers>=4.45.0", "accelerate>=1.0.0"]
+dev = ["pytest>=8.0.0", "ruff>=0.6.0"]
+
+[project.scripts]
+cee = "cee.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
