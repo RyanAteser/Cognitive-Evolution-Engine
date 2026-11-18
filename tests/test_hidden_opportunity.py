@@ -34,3 +34,19 @@ def test_build_task_includes_only_solver_packet():
     assert "P1" in task.prompt
     assert "Repeated customer complaint" in task.prompt
     assert "answer_key" not in task.prompt
+
+
+def test_committed_dataset_is_balanced_and_answer_key_is_complete():
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    dataset = root / "benchmarks" / "datasets" / "hidden_opportunity_v1.jsonl"
+    answer_key = root / "benchmarks" / "answer_keys" / "hidden_opportunity_v1.json"
+    rows = [json.loads(line) for line in dataset.read_text(encoding="utf-8").splitlines()]
+    key = json.loads(answer_key.read_text(encoding="utf-8"))
+    assert len(rows) == 12
+    assert len(key["cases"]) == 12
+    assert {row["case_id"] for row in rows} == set(key["cases"])
+    for domain in ("shopify", "quant"):
+        for split in ("train", "validation", "test"):
+            assert sum(row["domain"] == domain and row["split"] == split for row in rows) == 2
