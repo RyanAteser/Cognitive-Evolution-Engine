@@ -2,6 +2,7 @@
 import argparse
 import os
 import time
+from pathlib import Path
 
 from cee.adapters.general import GeneralResearchAdapter
 from cee.core.evolution import EvolutionEngine
@@ -64,8 +65,7 @@ def run_task(domain: str, prompt: str) -> int:
     )
     store.save_evaluation(candidate, evaluation)
     print(response.text)
-    print(f"
-model={response.model}; latency={latency:.2f}s; score=unscored (no rubric)")
+    print(f"\nmodel={response.model}; latency={latency:.2f}s; score=unscored (no rubric)")
     return 0
 
 
@@ -98,7 +98,7 @@ def main() -> None:
         arms = tuple(dict.fromkeys(x.strip().upper() for x in args.arms.split(",") if x.strip()))
         if not arms or any(x not in {"A", "B", "C", "D", "E"} for x in arms):
             raise SystemExit("--arms must contain one or more of A,B,C,D,E")
-        run_experiment(__import__("pathlib").Path(args.dataset), __import__("pathlib").Path(args.output), args.split, arms)
+        run_experiment(Path(args.dataset), Path(args.output), args.split, arms)
         return
 
 
