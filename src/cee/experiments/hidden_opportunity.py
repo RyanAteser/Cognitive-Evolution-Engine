@@ -55,12 +55,20 @@ def load_cases(path: Path, split: str) -> list[dict[str, Any]]:
 def build_task(case: dict[str, Any]) -> Task:
     packet = json.dumps(case["packet"], ensure_ascii=False, indent=2)
     prompt = (
-        "RESEARCH TASK\n"
-        f"Domain: {case['domain']}\n"
-        f"{case['task']}\n\n"
-        "EVIDENCE PACKET (the IDs below are the only permitted citations):\n"
-        f"{packet}\n\n"
-        "OUTPUT REQUIREMENTS\n"
+        "RESEARCH TASK
+"
+        f"Domain: {case['domain']}
+"
+        f"{case['task']}
+
+"
+        "EVIDENCE PACKET (the IDs below are the only permitted citations):
+"
+        f"{packet}
+
+"
+        "OUTPUT REQUIREMENTS
+"
         "Return a structured report with: (1) up to two candidate opportunities; "
         "(2) target customer or market condition; (3) evidence IDs and explicit "
         "inference chain; (4) counter-evidence and alternative explanations; "
@@ -125,7 +133,10 @@ def run_arm(arm: str, provider: GeminiProvider, task: Task,
             )
         synthesis_task = Task(
             task.task_id + "-synthesis", task.domain,
-            task.prompt + "\n\nINDEPENDENT ANALYSES:\n" +
+            task.prompt + "
+
+INDEPENDENT ANALYSES:
+" +
             json.dumps([{"role": x["role"], "text": x["text"]} for x in independent],
                        ensure_ascii=False),
             task.metadata,
@@ -154,8 +165,11 @@ def run_arm(arm: str, provider: GeminiProvider, task: Task,
         if final_output is None:
             final_output = (
                 "ABSTAIN: " + correction.report.rationale +
-                "\nInitial traces:\n" +
-                "\n".join(t.answer for t in correction.initial_traces)
+                "
+Initial traces:
+" +
+                "
+".join(t.answer for t in correction.initial_traces)
             )
         return {
             "final_output": final_output,
@@ -185,7 +199,9 @@ def run_arm(arm: str, provider: GeminiProvider, task: Task,
                 "rationale": correction.report.rationale,
             },
             "calls": [{"role": "cee-workflow", "generation_calls":
-                       correction.generation_calls}],
+                       correction.generation_calls, "provider_usage":
+                       list(correction.provider_usage), "latency_seconds":
+                       correction.latency_seconds}],
         }
     raise ValueError(f"unknown arm: {arm}")
 
@@ -230,8 +246,14 @@ def run_experiment(dataset: Path, output: Path, split: str,
             })
     # Freeze all outputs in one JSON document. Keep raw_arm in the sealed
     # research archive; blind review export below excludes it and all model traces.
-    archive = {"manifest": manifest, "records": records}
-    output.write_text(json.dumps(archive, ensure_ascii=False, indent=2) + "\n",
+    archive = {"manifest": {k: v for k, v in manifest.items() if k != "blind_labels"},
+               "records": records}
+    unblind_path = output.with_name(output.stem + "_unblind_key.json")
+    unblind_path.write_text(json.dumps({"blind_labels": blind_labels}, indent=2) + "\
+",
+                            encoding="utf-8")
+    output.write_text(json.dumps(archive, ensure_ascii=False, indent=2) + "
+",
                       encoding="utf-8")
     review_path = output.with_name(output.stem + "_blind_review.csv")
     with review_path.open("w", newline="", encoding="utf-8") as stream:
