@@ -17,7 +17,7 @@ CEE now includes a quantum-inspired **classical** error-correction layer. It tre
 
 This is inspired by the architecture of quantum error correction—not quantum computing. It uses no qubits or quantum hardware, and it does not assume majority vote equals truth. The research goal is to measure whether structured redundancy, error detection, targeted repair, and conservative decoding improve reliability under controlled fault injection.
 
-See the in-depth [Cognitive Error Correction research guide](docs/COGNITIVE_ERROR_CORRECTION.md) for the conceptual mapping, implementation, experiments, metrics, domain applications, safeguards, and roadmap.
+See the in-depth [Cognitive Error Correction research guide](docs/COGNITIVE_ERROR_CORRECTION.md) for the conceptual mapping and research protocol, plus the [Gemini-backed correction workflow guide](docs/GEMINI_CORRECTION_WORKFLOW.md) for multi-trace generation, evidence-aware decoding, targeted repair, setup, and limitations.
 
 ## Quick start (Python 3.11+)
 
