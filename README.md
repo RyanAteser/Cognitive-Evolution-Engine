@@ -11,6 +11,14 @@ CEE is a research laboratory—not a promise of autonomous intelligence or profi
 - SQLite experiment history.
 - Offline demo and unit tests.
 
+## Cognitive Error Correction (new research module)
+
+CEE now includes a quantum-inspired **classical** error-correction layer. It treats multiple reasoning attempts as redundant traces, detects disagreement and contradictory claims (the syndrome), and uses evidence-aware decoding to select a result or abstain.
+
+This is inspired by the architecture of quantum error correction—not quantum computing. It uses no qubits or quantum hardware, and it does not assume majority vote equals truth. The research goal is to measure whether structured redundancy, error detection, targeted repair, and conservative decoding improve reliability under controlled fault injection.
+
+See the in-depth [Cognitive Error Correction research guide](docs/COGNITIVE_ERROR_CORRECTION.md) for the conceptual mapping, implementation, experiments, metrics, domain applications, safeguards, and roadmap.
+
 ## Quick start (Python 3.11+)
 
 ```powershell
@@ -29,12 +37,12 @@ $env:CEE_MODEL = "gemini-2.5-flash"
 cee run --domain general --task "Explain precision versus recall."
 ```
 
-Never commit API keys. See `.env.example`.
+Never commit API keys. See .env.example.
 
 ## Commands
-- `cee demo`: deterministic offline wiring demo (synthetic fitness, not a real benchmark).
-- `cee run --domain general --task "..."`: call Gemini for a general task.
-- `cee status`: show local SQLite experiment counts.
+- cee demo: deterministic offline wiring demo (synthetic fitness, not a real benchmark).
+- cee run --domain general --task "…": call Gemini for a general task.
+- cee status: show local SQLite experiment counts.
 
 ## Principles
 1. Same task, data, model access, and resource budget for fair comparisons.
@@ -45,12 +53,12 @@ Never commit API keys. See `.env.example`.
 6. Promote improvements only after independent validation.
 
 ## Architecture
-- `cee.core`: candidate genomes and evolutionary search.
-- `cee.models`: provider interfaces and model adapters.
-- `cee.adapters`: domain-specific task definitions and success criteria.
-- `cee.storage`: SQLite experiment history.
-- `tests`: deterministic unit tests.
+- cee.core: candidate genomes, evolutionary search, and cognitive error correction.
+- cee.models: provider interfaces and model adapters.
+- cee.adapters: domain-specific task definitions and success criteria.
+- cee.storage: SQLite experiment history.
+- tests: deterministic unit tests.
 
 Gemini's standard API controls are used as documented. Token-logit, soft-prompt, embedding, and activation interventions require a model/runtime that exposes those capabilities; ordinary prompt changes do not simulate them.
 
-See [the experiment protocol](docs/EXPERIMENT_PROTOCOL.md) and [roadmap](docs/ROADMAP.md).
+See the experiment protocol and roadmap in docs.
