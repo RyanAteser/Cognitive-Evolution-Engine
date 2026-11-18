@@ -59,3 +59,17 @@ def test_declared_errors_create_syndrome_and_penalty():
     report = corrector.decode(traces, {"e1", "e2"})
     assert any(s.code == "DECLARED_ERROR" for s in report.syndromes)
     assert report.selected_agent == "clean"
+
+
+def test_claim_level_evidence_counts_without_trace_level_evidence():
+    corrector = CognitiveErrorCorrector(minimum_margin=0.01)
+    traces = (
+        ReasoningTrace(
+            "claim-supported", "answer",
+            (Claim("fact", "true", ("source-claim",)),),
+            (), 0.8,
+        ),
+        ReasoningTrace("no-support", "different answer", confidence=0.5),
+    )
+    report = corrector.decode(traces, {"source-claim"})
+    assert report.selected_agent == "claim-supported"
